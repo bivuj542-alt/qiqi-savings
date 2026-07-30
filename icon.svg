@@ -4,40 +4,52 @@
 >
   <defs>
     <linearGradient
-      id="background"
+      id="bg"
       x1="70"
       y1="40"
       x2="450"
-      y2="490"
+      y2="480"
       gradientUnits="userSpaceOnUse"
     >
-      <stop offset="0" stop-color="#ef9dcc"/>
-      <stop offset="0.5" stop-color="#9b78e6"/>
-      <stop offset="1" stop-color="#332052"/>
+      <stop offset="0" stop-color="#f2a4cf"/>
+      <stop offset="0.5" stop-color="#9e7de7"/>
+      <stop offset="1" stop-color="#32204f"/>
     </linearGradient>
 
     <linearGradient
-      id="face"
-      x1="170"
+      id="coin"
+      x1="330"
+      y1="360"
+      x2="430"
+      y2="450"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop offset="0" stop-color="#ffe39a"/>
+      <stop offset="1" stop-color="#f0b95c"/>
+    </linearGradient>
+
+    <linearGradient
+      id="catFace"
+      x1="120"
       y1="150"
-      x2="350"
-      y2="370"
+      x2="260"
+      y2="320"
       gradientUnits="userSpaceOnUse"
     >
-      <stop offset="0" stop-color="#ffe4e6"/>
-      <stop offset="1" stop-color="#f4a4bd"/>
+      <stop offset="0" stop-color="#fff1f5"/>
+      <stop offset="1" stop-color="#f6b7cb"/>
     </linearGradient>
 
     <linearGradient
-      id="snout"
-      x1="205"
-      y1="270"
-      x2="310"
-      y2="350"
+      id="dogFace"
+      x1="245"
+      y1="150"
+      x2="395"
+      y2="330"
       gradientUnits="userSpaceOnUse"
     >
-      <stop offset="0" stop-color="#f7b2c6"/>
-      <stop offset="1" stop-color="#de789d"/>
+      <stop offset="0" stop-color="#f7f1ec"/>
+      <stop offset="1" stop-color="#d7b59e"/>
     </linearGradient>
 
     <filter
@@ -51,232 +63,220 @@
         dx="0"
         dy="18"
         stdDeviation="18"
-        flood-color="#211332"
+        flood-color="#201332"
         flood-opacity="0.34"
       />
     </filter>
   </defs>
 
-  <!-- 全铺背景，适配圆角和图标着色 -->
+  <!-- 背景 -->
   <rect
     width="512"
     height="512"
-    fill="url(#background)"
+    rx="110"
+    fill="url(#bg)"
   />
 
-  <!-- 淡淡的星轨 -->
+  <!-- 背景光圈 -->
   <circle
     cx="256"
-    cy="294"
-    r="205"
+    cy="300"
+    r="170"
     fill="none"
     stroke="#ffffff"
-    stroke-opacity="0.11"
+    stroke-opacity="0.09"
+    stroke-width="20"
+  />
+  <circle
+    cx="256"
+    cy="300"
+    r="210"
+    fill="none"
+    stroke="#ffffff"
+    stroke-opacity="0.05"
     stroke-width="2"
   />
 
-  <circle
-    cx="256"
-    cy="294"
-    r="166"
-    fill="none"
-    stroke="#ffffff"
-    stroke-opacity="0.08"
-    stroke-width="18"
-  />
+  <!-- 星点 -->
+  <circle cx="88" cy="92" r="6" fill="#ffffff" fill-opacity="0.7"/>
+  <circle cx="428" cy="110" r="4" fill="#ffffff" fill-opacity="0.55"/>
+  <circle cx="430" cy="240" r="5" fill="#ffffff" fill-opacity="0.38"/>
+  <circle cx="72" cy="370" r="4" fill="#ffffff" fill-opacity="0.38"/>
 
-  <circle
-    cx="94"
-    cy="104"
-    r="7"
-    fill="#ffffff"
-    fill-opacity="0.72"
-  />
-
-  <circle
-    cx="420"
-    cy="128"
-    r="5"
-    fill="#ffffff"
-    fill-opacity="0.58"
-  />
-
-  <circle
-    cx="78"
-    cy="360"
-    r="4"
-    fill="#ffffff"
-    fill-opacity="0.46"
-  />
-
-  <!-- 小猪 -->
   <g filter="url(#shadow)">
+    <!-- 猫猫 -->
     <!-- 耳朵 -->
     <path
-      d="M174 190
-         C137 158 139 112 151 93
-         C184 99 211 121 220 154
+      d="M138 202
+         C124 158 138 125 168 106
+         C184 133 196 164 194 198
          Z"
-      fill="#f49eba"
+      fill="#f4a5be"
+    />
+    <path
+      d="M244 197
+         C244 160 260 131 285 110
+         C303 135 309 167 294 206
+         Z"
+      fill="#f4a5be"
     />
 
     <path
-      d="M338 190
-         C375 158 373 112 361 93
-         C328 99 301 121 292 154
+      d="M154 184
+         C147 161 153 144 170 131
+         C180 145 186 163 184 179
          Z"
-      fill="#f49eba"
+      fill="#e47da4"
+      opacity="0.8"
     />
-
     <path
-      d="M170 165
-         C155 143 157 122 160 113
-         C178 120 190 133 196 151
+      d="M255 182
+         C257 160 267 144 282 131
+         C292 147 294 164 286 182
          Z"
-      fill="#d96e96"
-      opacity="0.78"
+      fill="#e47da4"
+      opacity="0.8"
     />
 
-    <path
-      d="M342 165
-         C357 143 355 122 352 113
-         C334 120 322 133 316 151
-         Z"
-      fill="#d96e96"
-      opacity="0.78"
-    />
-
-    <!-- 脸 -->
-    <ellipse
-      cx="256"
-      cy="248"
-      rx="137"
-      ry="132"
-      fill="url(#face)"
-    />
-
-    <!-- 额头高光 -->
-    <ellipse
-      cx="218"
-      cy="177"
-      rx="50"
-      ry="30"
-      fill="#ffffff"
-      fill-opacity="0.22"
-      transform="rotate(-18 218 177)"
-    />
-
-    <!-- 眼睛 -->
-    <ellipse
-      cx="205"
-      cy="236"
-      rx="18"
-      ry="24"
-      fill="#47334d"
-    />
-
-    <ellipse
-      cx="307"
-      cy="236"
-      rx="18"
-      ry="24"
-      fill="#47334d"
-    />
-
+    <!-- 猫脸 -->
     <circle
-      cx="199"
-      cy="228"
-      r="6"
-      fill="#ffffff"
+      cx="214"
+      cy="234"
+      r="88"
+      fill="url(#catFace)"
     />
 
-    <circle
-      cx="301"
-      cy="228"
-      r="6"
-      fill="#ffffff"
-    />
+    <!-- 猫眼 -->
+    <ellipse cx="182" cy="229" rx="11" ry="15" fill="#4b344d"/>
+    <ellipse cx="242" cy="229" rx="11" ry="15" fill="#4b344d"/>
+    <circle cx="178" cy="224" r="3.8" fill="#ffffff"/>
+    <circle cx="238" cy="224" r="3.8" fill="#ffffff"/>
 
-    <!-- 腮红 -->
-    <ellipse
-      cx="165"
-      cy="280"
-      rx="24"
-      ry="14"
-      fill="#ec79a2"
-      opacity="0.44"
-    />
-
-    <ellipse
-      cx="347"
-      cy="280"
-      rx="24"
-      ry="14"
-      fill="#ec79a2"
-      opacity="0.44"
-    />
-
-    <!-- 鼻子 -->
-    <ellipse
-      cx="256"
-      cy="303"
-      rx="72"
-      ry="52"
-      fill="url(#snout)"
-    />
-
-    <ellipse
-      cx="230"
-      cy="303"
-      rx="10"
-      ry="15"
-      fill="#75425c"
-    />
-
-    <ellipse
-      cx="282"
-      cy="303"
-      rx="10"
-      ry="15"
-      fill="#75425c"
-    />
-
-    <!-- 微笑 -->
+    <!-- 猫鼻嘴 -->
     <path
-      d="M231 337
-         C246 349 266 349 281 337"
+      d="M214 245
+         C205 245 202 252 214 257
+         C226 252 223 245 214 245Z"
+      fill="#e58bad"
+    />
+    <path
+      d="M214 257
+         C210 266 199 270 188 268"
       fill="none"
-      stroke="#81465f"
-      stroke-width="7"
+      stroke="#8b647f"
+      stroke-width="4.5"
       stroke-linecap="round"
     />
-  </g>
-
-  <!-- 金币 -->
-  <g filter="url(#shadow)">
-    <circle
-      cx="398"
-      cy="397"
-      r="60"
-      fill="#ffd986"
-    />
-
-    <circle
-      cx="398"
-      cy="397"
-      r="45"
-      fill="none"
-      stroke="#e9ae4f"
-      stroke-width="7"
-    />
-
     <path
-      d="M398 372
-         C388 354 358 361 365 383
-         C370 398 398 416 398 416
-         C398 416 426 398 431 383
-         C438 361 408 354 398 372Z"
-      fill="#e88db5"
+      d="M214 257
+         C218 266 229 270 240 268"
+      fill="none"
+      stroke="#8b647f"
+      stroke-width="4.5"
+      stroke-linecap="round"
+    />
+
+    <!-- 猫胡须 -->
+    <path d="M161 251 L126 246" stroke="#9f84a2" stroke-width="4" stroke-linecap="round"/>
+    <path d="M163 263 L127 266" stroke="#9f84a2" stroke-width="4" stroke-linecap="round"/>
+    <path d="M267 251 L302 246" stroke="#9f84a2" stroke-width="4" stroke-linecap="round"/>
+    <path d="M265 263 L301 266" stroke="#9f84a2" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- 狗狗 -->
+    <!-- 耳朵 -->
+    <path
+      d="M285 192
+         C278 148 300 122 334 118
+         C340 146 332 181 313 208
+         Z"
+      fill="#b7856d"
+    />
+    <path
+      d="M395 203
+         C420 170 423 130 404 112
+         C374 125 360 158 362 196
+         Z"
+      fill="#b7856d"
+    />
+
+    <!-- 狗脸 -->
+    <circle
+      cx="322"
+      cy="236"
+      r="84"
+      fill="url(#dogFace)"
+    />
+
+    <!-- 狗眼 -->
+    <ellipse cx="293" cy="229" rx="10" ry="14" fill="#493740"/>
+    <ellipse cx="348" cy="229" rx="10" ry="14" fill="#493740"/>
+    <circle cx="290" cy="224" r="3.5" fill="#ffffff"/>
+    <circle cx="345" cy="224" r="3.5" fill="#ffffff"/>
+
+    <!-- 狗鼻嘴 -->
+    <ellipse
+      cx="321"
+      cy="258"
+      rx="32"
+      ry="24"
+      fill="#f0d8ca"
+    />
+    <ellipse
+      cx="321"
+      cy="252"
+      rx="10"
+      ry="7"
+      fill="#573f47"
+    />
+    <path
+      d="M321 259
+         C314 270 303 274 293 271"
+      fill="none"
+      stroke="#7b5e67"
+      stroke-width="4.5"
+      stroke-linecap="round"
+    />
+    <path
+      d="M321 259
+         C328 270 339 274 349 271"
+      fill="none"
+      stroke="#7b5e67"
+      stroke-width="4.5"
+      stroke-linecap="round"
+    />
+
+    <!-- 两只之间的小心心 -->
+    <path
+      d="M268 205
+         C258 187 232 193 236 214
+         C239 229 268 246 268 246
+         C268 246 297 229 300 214
+         C304 193 278 187 268 205Z"
+      fill="#f08eb8"
+    />
+
+    <!-- 金币 -->
+    <circle
+      cx="384"
+      cy="388"
+      r="52"
+      fill="url(#coin)"
+    />
+    <circle
+      cx="384"
+      cy="388"
+      r="39"
+      fill="none"
+      stroke="#e4ab49"
+      stroke-width="6"
+    />
+    <path
+      d="M384 366
+         C375 351 351 357 356 376
+         C360 388 384 403 384 403
+         C384 403 408 388 412 376
+         C417 357 393 351 384 366Z"
+      fill="#ea8db5"
     />
   </g>
 </svg>
