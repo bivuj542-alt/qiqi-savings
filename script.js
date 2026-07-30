@@ -55,6 +55,9 @@ const saveNoteInput =
 const formError =
   document.getElementById("formError");
 
+const backupFileInput =
+  document.getElementById("backupFileInput");
+
 
 function readJSON(key, fallback) {
   try {
@@ -119,7 +122,7 @@ if (!Array.isArray(records)) {
 }
 
 
-// 兼容之前的测试数据
+// 兼容之前版本的数据
 if (records.length === 0) {
   const oldTotal =
     Number(
@@ -343,21 +346,50 @@ function addManagementStyles() {
     .data-tools {
       margin-top: 22px;
       padding-top: 17px;
-      border-top: 1px solid rgba(112, 87, 128, 0.12);
+      border-top:
+        1px solid
+        rgba(112, 87, 128, 0.12);
     }
 
+    .data-tools-title {
+      margin: 0 0 11px;
+      color: #8f7a97;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-align: left;
+    }
+
+    .data-tools-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .backup-button,
     .clear-data-button {
-      width: 100%;
       min-height: 45px;
       border: 0;
       border-radius: 15px;
-      color: #9a7088;
-      background: rgba(172, 106, 140, 0.08);
       font-size: 14px;
       font-weight: 650;
       cursor: pointer;
     }
 
+    .backup-button {
+      color: #756080;
+      background:
+        rgba(135, 105, 153, 0.10);
+    }
+
+    .clear-data-button {
+      width: 100%;
+      margin-top: 10px;
+      color: #9a7088;
+      background:
+        rgba(172, 106, 140, 0.08);
+    }
+
+    .backup-button:active,
     .clear-data-button:active {
       transform: scale(0.97);
     }
@@ -369,18 +401,25 @@ function addManagementStyles() {
       display: grid;
       place-items: center;
       padding: 22px;
-      background: rgba(15, 9, 29, 0.58);
+      background:
+        rgba(15, 9, 29, 0.58);
       backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      -webkit-backdrop-filter:
+        blur(8px);
     }
 
     .confirm-card {
       width: min(100%, 360px);
       padding: 25px 21px 20px;
-      border: 1px solid rgba(255, 255, 255, 0.72);
+      border:
+        1px solid
+        rgba(255, 255, 255, 0.72);
       border-radius: 25px;
-      background: rgba(255, 248, 240, 0.99);
-      box-shadow: 0 30px 80px rgba(8, 4, 28, 0.48);
+      background:
+        rgba(255, 248, 240, 0.99);
+      box-shadow:
+        0 30px 80px
+        rgba(8, 4, 28, 0.48);
       text-align: center;
     }
 
@@ -420,31 +459,38 @@ function addManagementStyles() {
 
     .confirm-cancel {
       color: #796581;
-      background: rgba(126, 98, 141, 0.10);
+      background:
+        rgba(126, 98, 141, 0.10);
     }
 
     .confirm-danger {
       color: white;
-      background: linear-gradient(
-        135deg,
-        #df94bc,
-        #a16fca
-      );
+      background:
+        linear-gradient(
+          135deg,
+          #df94bc,
+          #a16fca
+        );
     }
 
     .toast-message {
       position: fixed;
       z-index: 80;
       left: 50%;
-      bottom: calc(
-        34px + env(safe-area-inset-bottom)
-      );
+      bottom:
+        calc(
+          34px +
+          env(safe-area-inset-bottom)
+        );
       transform: translateX(-50%);
       padding: 12px 18px;
       border-radius: 999px;
       color: white;
-      background: rgba(48, 34, 67, 0.92);
-      box-shadow: 0 12px 35px rgba(7, 3, 20, 0.32);
+      background:
+        rgba(48, 34, 67, 0.92);
+      box-shadow:
+        0 12px 35px
+        rgba(7, 3, 20, 0.32);
       font-size: 14px;
       white-space: nowrap;
       animation: toastIn 0.25s ease;
@@ -453,12 +499,14 @@ function addManagementStyles() {
     @keyframes toastIn {
       from {
         opacity: 0;
-        transform: translate(-50%, 12px);
+        transform:
+          translate(-50%, 12px);
       }
 
       to {
         opacity: 1;
-        transform: translate(-50%, 0);
+        transform:
+          translate(-50%, 0);
       }
     }
   `;
@@ -687,17 +735,20 @@ function renderRecords() {
       const item =
         document.createElement("article");
 
-      item.className = "record-item";
+      item.className =
+        "record-item";
 
       const info =
         document.createElement("div");
 
-      info.className = "record-info";
+      info.className =
+        "record-info";
 
       const date =
         document.createElement("span");
 
-      date.className = "record-date";
+      date.className =
+        "record-date";
 
       date.textContent =
         formatRecordDate(record.date);
@@ -705,20 +756,24 @@ function renderRecords() {
       const note =
         document.createElement("span");
 
-      note.className = "record-note";
+      note.className =
+        "record-note";
 
       note.textContent =
-        record.note || "存入小金库";
+        record.note ||
+        "存入小金库";
 
       const side =
         document.createElement("div");
 
-      side.className = "record-side";
+      side.className =
+        "record-side";
 
       const money =
         document.createElement("strong");
 
-      money.className = "record-amount";
+      money.className =
+        "record-amount";
 
       money.textContent =
         `+¥${formatMoney(record.amount)}`;
@@ -759,6 +814,215 @@ function renderRecords() {
 }
 
 
+function createBackupPayload() {
+  return {
+    app: "qiqi-savings",
+    version: 1,
+    exportedAt:
+      new Date().toISOString(),
+    goal,
+    records
+  };
+}
+
+
+async function exportBackup() {
+  const backup =
+    createBackupPayload();
+
+  const text =
+    JSON.stringify(
+      backup,
+      null,
+      2
+    );
+
+  const fileName =
+    `七七存钱罐备份-${getDateKey(new Date())}.json`;
+
+  const file = new File(
+    [text],
+    fileName,
+    {
+      type: "application/json"
+    }
+  );
+
+  try {
+    if (
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare({
+        files: [file]
+      })
+    ) {
+      await navigator.share({
+        title: "七七的存钱罐备份",
+        files: [file]
+      });
+
+      showToast(
+        "备份已准备好，记得存到“文件”里 ✨"
+      );
+
+      return;
+    }
+
+    const url =
+      URL.createObjectURL(file);
+
+    const link =
+      document.createElement("a");
+
+    link.href = url;
+    link.download = fileName;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+
+    showToast("备份文件已导出 ✨");
+  } catch (error) {
+    if (error?.name !== "AbortError") {
+      showToast(
+        "导出失败，请再试一次"
+      );
+    }
+  }
+}
+
+
+function normalizeImportedRecords(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((record, index) => {
+      const amount =
+        Number(record?.amount);
+
+      const date =
+        String(record?.date || "");
+
+      if (
+        !Number.isFinite(amount) ||
+        amount <= 0 ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(date)
+      ) {
+        return null;
+      }
+
+      return {
+        id:
+          String(record?.id || "") ||
+          `import-${Date.now()}-${index}`,
+
+        amount,
+        date,
+
+        note:
+          String(record?.note || "")
+            .slice(0, 24),
+
+        createdAt:
+          Number(record?.createdAt) ||
+          Date.now() + index
+      };
+    })
+    .filter(Boolean);
+}
+
+
+async function importBackup(file) {
+  try {
+    const text =
+      await file.text();
+
+    const parsed =
+      JSON.parse(text);
+
+    const importedRecords =
+      normalizeImportedRecords(
+        Array.isArray(parsed)
+          ? parsed
+          : parsed?.records
+      );
+
+    if (importedRecords.length === 0) {
+      showToast(
+        "这个备份里没有可用记录"
+      );
+
+      return;
+    }
+
+    const importedTotal =
+      importedRecords.reduce(
+        (sum, record) =>
+          sum + record.amount,
+        0
+      );
+
+    const confirmed =
+      await askConfirm({
+        icon: "📥",
+        title: "导入这份备份？",
+        message:
+          `将恢复 ${importedRecords.length} 笔记录，` +
+          `合计 ¥${formatMoney(importedTotal)}。` +
+          "当前页面里的记录会被这份备份替换。",
+        confirmText: "确认导入"
+      });
+
+    if (!confirmed) {
+      return;
+    }
+
+    records = importedRecords;
+
+    const latestRecord =
+      [...records].sort(
+        (a, b) =>
+          String(b.date).localeCompare(
+            String(a.date)
+          )
+      )[0];
+
+    if (latestRecord) {
+      const latestDate =
+        new Date(
+          `${latestRecord.date}T00:00:00`
+        );
+
+      viewingDate =
+        new Date(
+          latestDate.getFullYear(),
+          latestDate.getMonth(),
+          1
+        );
+    }
+
+    saveLocalData();
+    updatePage();
+
+    showToast(
+      "备份已经恢复成功 ✨"
+    );
+  } catch {
+    showToast(
+      "导入失败，请确认选择的是备份文件"
+    );
+  } finally {
+    backupFileInput.value = "";
+  }
+}
+
+
 function ensureDataTools() {
   if (
     document.getElementById(
@@ -774,6 +1038,53 @@ function ensureDataTools() {
   tools.id = "dataTools";
   tools.className = "data-tools";
 
+  const title =
+    document.createElement("p");
+
+  title.className =
+    "data-tools-title";
+
+  title.textContent =
+    "数据备份";
+
+  const actions =
+    document.createElement("div");
+
+  actions.className =
+    "data-tools-actions";
+
+  const exportButton =
+    document.createElement("button");
+
+  exportButton.type = "button";
+
+  exportButton.className =
+    "backup-button";
+
+  exportButton.textContent =
+    "导出备份";
+
+  exportButton.addEventListener(
+    "click",
+    exportBackup
+  );
+
+  const importButton =
+    document.createElement("button");
+
+  importButton.type = "button";
+
+  importButton.className =
+    "backup-button";
+
+  importButton.textContent =
+    "导入备份";
+
+  importButton.addEventListener(
+    "click",
+    () => backupFileInput.click()
+  );
+
   const clearButton =
     document.createElement("button");
 
@@ -783,7 +1094,7 @@ function ensureDataTools() {
     "clear-data-button";
 
   clearButton.textContent =
-    "清空测试数据";
+    "清空全部数据";
 
   clearButton.addEventListener(
     "click",
@@ -791,9 +1102,9 @@ function ensureDataTools() {
       const confirmed =
         await askConfirm({
           icon: "🧹",
-          title: "清空全部测试数据？",
+          title: "清空全部数据？",
           message:
-            "现有金额、记录和日历爱心都会被清空，页面会重新从 2026 年 8 月开始。",
+            "现有金额、记录和日历爱心都会被清空。建议先导出一份备份，再执行清空。",
           confirmText: "全部清空"
         });
 
@@ -823,11 +1134,21 @@ function ensureDataTools() {
       updatePage();
 
       showToast(
-        "测试数据已清空，八月正式开始 ✨"
+        "数据已经清空"
       );
     }
   );
 
+  actions.appendChild(
+    exportButton
+  );
+
+  actions.appendChild(
+    importButton
+  );
+
+  tools.appendChild(title);
+  tools.appendChild(actions);
   tools.appendChild(clearButton);
 
   recordList.insertAdjacentElement(
@@ -981,7 +1302,9 @@ saveForm.addEventListener(
     saveLocalData();
 
     const selectedDate =
-      new Date(`${date}T00:00:00`);
+      new Date(
+        `${date}T00:00:00`
+      );
 
     viewingDate =
       new Date(
@@ -1020,6 +1343,19 @@ nextMonthButton.addEventListener(
     );
 
     renderCalendar();
+  }
+);
+
+
+backupFileInput.addEventListener(
+  "change",
+  function () {
+    const file =
+      backupFileInput.files?.[0];
+
+    if (file) {
+      importBackup(file);
+    }
   }
 );
 
