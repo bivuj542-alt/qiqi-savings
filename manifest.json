@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "七七的存钱罐",
+  "short_name": "七七小金库",
+  "description": "七七的六万元存钱计划与每日存钱日历",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#201638",
+  "theme_color": "#201638",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
