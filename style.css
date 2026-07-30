@@ -3,11 +3,13 @@
 }
 
 :root {
-  --cream: rgba(255, 248, 238, 0.95);
+  --cream: rgba(255, 248, 238, 0.96);
+  --cream-dark: #f4e9e1;
   --text: #544362;
-  --muted: #9b879f;
+  --muted: #99869f;
   --pink: #e99bc7;
   --purple: #9879e6;
+  --line: rgba(112, 87, 128, 0.12);
 }
 
 html,
@@ -20,13 +22,13 @@ body {
   min-height: 100svh;
   overflow-x: hidden;
 
+  color: var(--text);
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-
-  color: var(--text);
 
   background:
     radial-gradient(
@@ -47,6 +49,10 @@ body {
     );
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -54,11 +60,16 @@ body::before {
 
   width: 470px;
   height: 470px;
+
   left: 50%;
   bottom: -260px;
 
   transform: translateX(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.24);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.24);
+
   border-radius: 50%;
 
   box-shadow:
@@ -96,8 +107,12 @@ body::after {
   pointer-events: none;
 }
 
-button {
+button,
+input {
   font: inherit;
+}
+
+button {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -111,13 +126,17 @@ button {
   padding:
     max(28px, env(safe-area-inset-top))
     18px
-    calc(48px + env(safe-area-inset-bottom));
+    calc(130px + env(safe-area-inset-bottom));
 }
 
 .calendar-card,
 .saving-card {
   background: var(--cream);
-  border: 1px solid rgba(255, 255, 255, 0.58);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.58);
+
   box-shadow:
     0 24px 60px rgba(10, 5, 35, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
@@ -127,7 +146,7 @@ button {
 }
 
 .calendar-card {
-  padding: 22px 18px 24px;
+  padding: 22px 16px 24px;
   border-radius: 30px;
 }
 
@@ -137,12 +156,14 @@ button {
   align-items: center;
   gap: 10px;
 
-  margin-bottom: 21px;
+  margin-bottom: 20px;
+
   text-align: center;
 }
 
 .calendar-header h1 {
   margin: 3px 0 0;
+
   font-size: 25px;
   line-height: 1.2;
   letter-spacing: 0.5px;
@@ -150,7 +171,9 @@ button {
 
 .small-title {
   margin: 0;
+
   color: var(--muted);
+
   font-size: 12px;
   letter-spacing: 2px;
 }
@@ -163,6 +186,7 @@ button {
   place-items: center;
 
   padding: 0;
+
   border: 0;
   border-radius: 50%;
 
@@ -191,19 +215,21 @@ button {
 
 .weekdays span {
   color: #a28eaa;
+
   font-size: 12px;
   font-weight: 600;
+
   text-align: center;
 }
 
 .calendar-days {
-  gap: 4px 0;
+  gap: 3px 0;
 }
 
 .day,
 .empty-day {
   position: relative;
-  aspect-ratio: 1;
+  height: 43px;
 }
 
 .day {
@@ -213,6 +239,7 @@ button {
   border-radius: 50%;
 
   color: #75617d;
+
   font-size: 13px;
   font-weight: 500;
 }
@@ -221,13 +248,16 @@ button {
   color: white;
   font-weight: 700;
 
-  background: linear-gradient(
-    135deg,
-    var(--pink),
-    var(--purple)
-  );
+  background:
+    linear-gradient(
+      135deg,
+      var(--pink),
+      var(--purple)
+    );
 
-  box-shadow: 0 7px 16px rgba(161, 116, 211, 0.34);
+  box-shadow:
+    0 7px 16px
+    rgba(161, 116, 211, 0.34);
 }
 
 .day.saved::after {
@@ -245,8 +275,10 @@ button {
 
 .saving-card {
   margin-top: 18px;
-  padding: 24px 22px 22px;
+  padding: 24px 21px 26px;
+
   border-radius: 28px;
+
   text-align: center;
 }
 
@@ -262,7 +294,9 @@ button {
 
 #amount {
   margin: 15px 0 16px;
+
   color: #806d89;
+
   font-size: 16px;
   line-height: 1.5;
 }
@@ -272,9 +306,11 @@ button {
   height: 10px;
 
   overflow: hidden;
+
   border-radius: 999px;
 
-  background: rgba(120, 94, 136, 0.13);
+  background:
+    rgba(120, 94, 136, 0.13);
 }
 
 .progress-bar {
@@ -283,17 +319,19 @@ button {
 
   border-radius: inherit;
 
-  background: linear-gradient(
-    90deg,
-    var(--pink),
-    var(--purple)
-  );
+  background:
+    linear-gradient(
+      90deg,
+      var(--pink),
+      var(--purple)
+    );
 
   transition: width 0.45s ease;
 }
 
 .save-button {
   width: 100%;
+
   margin-top: 20px;
   padding: 16px 20px;
 
@@ -301,13 +339,17 @@ button {
   border-radius: 18px;
 
   color: white;
-  background: linear-gradient(
-    135deg,
-    #e79ac8,
-    #9278e4
-  );
 
-  box-shadow: 0 13px 26px rgba(126, 91, 187, 0.28);
+  background:
+    linear-gradient(
+      135deg,
+      #e79ac8,
+      #9278e4
+    );
+
+  box-shadow:
+    0 13px 26px
+    rgba(126, 91, 187, 0.28);
 
   font-size: 17px;
   font-weight: 700;
@@ -319,6 +361,346 @@ button {
   transform: scale(0.97);
 }
 
+.records-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 28px;
+  padding-bottom: 12px;
+
+  border-bottom:
+    1px solid var(--line);
+
+  text-align: left;
+}
+
+.records-header h3 {
+  margin: 0;
+
+  font-size: 16px;
+}
+
+.records-header span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.record-list {
+  display: grid;
+  gap: 10px;
+
+  margin-top: 12px;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  padding: 14px 15px;
+
+  border:
+    1px solid
+    rgba(117, 91, 132, 0.09);
+
+  border-radius: 17px;
+
+  background:
+    rgba(255, 255, 255, 0.48);
+
+  text-align: left;
+}
+
+.record-info {
+  min-width: 0;
+}
+
+.record-date {
+  display: block;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+.record-note {
+  display: block;
+
+  margin-top: 4px;
+
+  overflow: hidden;
+
+  color: #725f7b;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.record-amount {
+  flex-shrink: 0;
+
+  color: #a268ad;
+
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.empty-records {
+  margin: 8px 0 0;
+  padding: 22px 10px;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  text-align: center;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+
+  display: grid;
+  align-items: end;
+
+  padding:
+    20px
+    18px
+    calc(20px + env(safe-area-inset-bottom));
+
+  background:
+    rgba(16, 10, 31, 0.56);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  opacity: 0;
+
+  transition: opacity 0.2s ease;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+}
+
+.modal-card {
+  width: min(100%, 430px);
+  margin: 0 auto;
+
+  padding: 23px 20px 20px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.75);
+
+  border-radius: 28px;
+
+  background:
+    rgba(255, 248, 240, 0.98);
+
+  box-shadow:
+    0 30px 80px
+    rgba(8, 4, 28, 0.48);
+
+  transform: translateY(25px) scale(0.98);
+
+  transition:
+    transform 0.22s ease;
+}
+
+.modal-overlay.show .modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  margin-bottom: 21px;
+}
+
+.modal-header h2 {
+  margin: 3px 0 0;
+  font-size: 24px;
+}
+
+.modal-small-title {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.close-button {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  color: #7f6989;
+  background: rgba(128, 101, 142, 0.1);
+
+  font-size: 26px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+
+  margin-bottom: 15px;
+
+  color: #6f5b78;
+
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.field input {
+  width: 100%;
+  min-height: 50px;
+
+  padding: 0 15px;
+
+  border:
+    1px solid
+    rgba(111, 86, 125, 0.13);
+
+  border-radius: 15px;
+
+  outline: none;
+
+  color: var(--text);
+  background: white;
+
+  font-size: 16px;
+}
+
+.field input:focus {
+  border-color:
+    rgba(157, 117, 210, 0.55);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(157, 117, 210, 0.1);
+}
+
+.money-input {
+  display: flex;
+  align-items: center;
+
+  min-height: 54px;
+
+  padding-left: 16px;
+
+  border:
+    1px solid
+    rgba(111, 86, 125, 0.13);
+
+  border-radius: 15px;
+
+  background: white;
+
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.money-input:focus-within {
+  border-color:
+    rgba(157, 117, 210, 0.55);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(157, 117, 210, 0.1);
+}
+
+.money-input input {
+  min-height: 52px;
+
+  border: 0;
+  box-shadow: none;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.money-input input:focus {
+  border: 0;
+  box-shadow: none;
+}
+
+.form-error {
+  min-height: 18px;
+  margin: -2px 0 12px;
+
+  color: #cf6d8f;
+
+  font-size: 13px;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 10px;
+}
+
+.secondary-button,
+.primary-button {
+  min-height: 51px;
+
+  border: 0;
+  border-radius: 16px;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.secondary-button {
+  color: #796581;
+  background: rgba(126, 98, 141, 0.1);
+}
+
+.primary-button {
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e59ac6,
+      #9278e2
+    );
+
+  box-shadow:
+    0 11px 23px
+    rgba(131, 93, 192, 0.24);
+}
+
+.secondary-button:active,
+.primary-button:active {
+  transform: scale(0.97);
+}
+
 @media (max-width: 360px) {
   .app {
     padding-left: 13px;
@@ -326,12 +708,17 @@ button {
   }
 
   .calendar-card {
-    padding-left: 13px;
-    padding-right: 13px;
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
   .calendar-header h1 {
     font-size: 22px;
+  }
+
+  .day,
+  .empty-day {
+    height: 39px;
   }
 
   .day {
