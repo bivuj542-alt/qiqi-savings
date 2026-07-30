@@ -20,7 +20,6 @@
 
     <section class="calendar-card">
       <header class="calendar-header">
-
         <button
           id="prevMonth"
           class="arrow-button"
@@ -43,7 +42,6 @@
         >
           ›
         </button>
-
       </header>
 
       <div class="weekdays">
@@ -63,7 +61,6 @@
     </section>
 
     <section class="saving-card">
-
       <div class="pig-icon">🐷</div>
 
       <h2>七七的存钱罐</h2>
@@ -96,9 +93,7 @@
         id="recordList"
         class="record-list"
       ></div>
-
     </section>
-
   </main>
 
   <div
@@ -112,11 +107,15 @@
       aria-modal="true"
       aria-labelledby="modalTitle"
     >
-
       <header class="modal-header">
         <div>
-          <p class="modal-small-title">存进未来的小金库</p>
-          <h2 id="modalTitle">记一笔存钱</h2>
+          <p class="modal-small-title">
+            存进未来的小金库
+          </p>
+
+          <h2 id="modalTitle">
+            记一笔存钱
+          </h2>
         </div>
 
         <button
@@ -130,7 +129,6 @@
       </header>
 
       <form id="saveForm">
-
         <label class="field">
           <span>存入金额</span>
 
@@ -177,7 +175,6 @@
         ></p>
 
         <div class="modal-actions">
-
           <button
             id="cancelSave"
             class="secondary-button"
@@ -192,13 +189,18 @@
           >
             存下这笔
           </button>
-
         </div>
-
       </form>
     </section>
   </div>
 
-  <script src="script.js?v=20260731-3"></script>
+  <input
+    id="backupFileInput"
+    type="file"
+    accept="application/json,.json"
+    hidden
+  >
+
+  <script src="script.js?v=20260731-4"></script>
 </body>
 </html>
