@@ -8,14 +8,45 @@
 </head>
 
 <body>
+  <main class="app">
+    <section class="calendar-card">
+      <header class="calendar-header">
+        <button id="prevMonth" class="arrow-button" aria-label="上个月">‹</button>
 
-  <h1>🐷 七七的存钱罐</h1>
+        <div>
+          <p class="small-title">七七的存钱日历</p>
+          <h1 id="monthTitle"></h1>
+        </div>
 
-  <p><p id="amount">已存：¥0 / ¥60000</p>
+        <button id="nextMonth" class="arrow-button" aria-label="下个月">›</button>
+      </header>
 
-<button id="saveButton">今天存钱</button>
+      <div class="weekdays">
+        <span>一</span>
+        <span>二</span>
+        <span>三</span>
+        <span>四</span>
+        <span>五</span>
+        <span>六</span>
+        <span>日</span>
+      </div>
+
+      <div id="calendarDays" class="calendar-days"></div>
+    </section>
+
+    <section class="saving-card">
+      <div class="pig-icon">🐷</div>
+      <h2>七七的存钱罐</h2>
+      <p id="amount">已存：¥0 / ¥60,000（0.0%）</p>
+
+      <div class="progress-track">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+
+      <button id="saveButton" class="save-button">今天存钱</button>
+    </section>
+  </main>
 
   <script src="script.js"></script>
-
 </body>
 </html>
