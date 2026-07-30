@@ -4,7 +4,7 @@
   "short_name": "七七小金库",
   "description": "七七的六万元存钱计划与每日存钱日历",
   "lang": "zh-CN",
-  "start_url": "./?app=catcoin-v1",
+  "start_url": "./?app=catcoin-v5",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
@@ -12,10 +12,10 @@
   "theme_color": "#201638",
   "icons": [
     {
-      "src": "qiqi-catcoin.png?v=1",
+      "src": "qiqi-catcoin.png.PNG",
       "sizes": "1254x1254",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
