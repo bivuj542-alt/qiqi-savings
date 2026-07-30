@@ -2,23 +2,48 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#201638">
+
   <title>七七的存钱罐</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <main class="app">
+
     <section class="calendar-card">
       <header class="calendar-header">
-        <button id="prevMonth" class="arrow-button" aria-label="上个月">‹</button>
+
+        <button
+          id="prevMonth"
+          class="arrow-button"
+          type="button"
+          aria-label="上个月"
+        >
+          ‹
+        </button>
 
         <div>
           <p class="small-title">七七的存钱日历</p>
           <h1 id="monthTitle"></h1>
         </div>
 
-        <button id="nextMonth" class="arrow-button" aria-label="下个月">›</button>
+        <button
+          id="nextMonth"
+          class="arrow-button"
+          type="button"
+          aria-label="下个月"
+        >
+          ›
+        </button>
+
       </header>
 
       <div class="weekdays">
@@ -31,21 +56,148 @@
         <span>日</span>
       </div>
 
-      <div id="calendarDays" class="calendar-days"></div>
+      <div
+        id="calendarDays"
+        class="calendar-days"
+      ></div>
     </section>
 
     <section class="saving-card">
+
       <div class="pig-icon">🐷</div>
+
       <h2>七七的存钱罐</h2>
-      <p id="amount">已存：¥0 / ¥60,000（0.0%）</p>
+
+      <p id="amount">
+        已存：¥0 / ¥60,000（0.0%）
+      </p>
 
       <div class="progress-track">
-        <div id="progressBar" class="progress-bar"></div>
+        <div
+          id="progressBar"
+          class="progress-bar"
+        ></div>
       </div>
 
-      <button id="saveButton" class="save-button">今天存钱</button>
+      <button
+        id="saveButton"
+        class="save-button"
+        type="button"
+      >
+        ＋ 记一笔存钱
+      </button>
+
+      <div class="records-header">
+        <h3>最近记录</h3>
+        <span id="recordCount">0 笔</span>
+      </div>
+
+      <div
+        id="recordList"
+        class="record-list"
+      ></div>
+
     </section>
+
   </main>
+
+  <div
+    id="modalOverlay"
+    class="modal-overlay"
+    hidden
+  >
+    <section
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+    >
+
+      <header class="modal-header">
+        <div>
+          <p class="modal-small-title">存进未来的小金库</p>
+          <h2 id="modalTitle">记一笔存钱</h2>
+        </div>
+
+        <button
+          id="closeModal"
+          class="close-button"
+          type="button"
+          aria-label="关闭"
+        >
+          ×
+        </button>
+      </header>
+
+      <form id="saveForm">
+
+        <label class="field">
+          <span>存入金额</span>
+
+          <div class="money-input">
+            <span>¥</span>
+
+            <input
+              id="saveAmount"
+              type="text"
+              inputmode="decimal"
+              placeholder="例如 720"
+              autocomplete="off"
+              required
+            >
+          </div>
+        </label>
+
+        <label class="field">
+          <span>存钱日期</span>
+
+          <input
+            id="saveDate"
+            type="date"
+            required
+          >
+        </label>
+
+        <label class="field">
+          <span>备注</span>
+
+          <input
+            id="saveNote"
+            type="text"
+            maxlength="24"
+            placeholder="例如：今天认真上班啦"
+            autocomplete="off"
+          >
+        </label>
+
+        <p
+          id="formError"
+          class="form-error"
+          aria-live="polite"
+        ></p>
+
+        <div class="modal-actions">
+
+          <button
+            id="cancelSave"
+            class="secondary-button"
+            type="button"
+          >
+            取消
+          </button>
+
+          <button
+            class="primary-button"
+            type="submit"
+          >
+            存下这笔
+          </button>
+
+        </div>
+
+      </form>
+    </section>
+  </div>
 
   <script src="script.js"></script>
 </body>
