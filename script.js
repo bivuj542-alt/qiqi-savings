@@ -1,41 +1,74 @@
 const goal = 60000;
 
-// 日历从 2026 年 8 月开始
-// JavaScript 的月份从 0 开始，所以 7 代表 8 月
-const firstMonth = new Date(2026, 7, 1);
-
 // 打开网页时默认显示 2026 年 8 月
-let viewingDate = new Date(firstMonth);
+let viewingDate = new Date(2026, 7, 1);
 
-// 读取以前保存的总金额
-let saved = Number(localStorage.getItem("qiqiSaved")) || 0;
+// 获取网页元素
+const amountText =
+  document.getElementById("amount");
 
-// 读取已经存过钱的日期
-let savedDates = [];
+const progressBar =
+  document.getElementById("progressBar");
 
-try {
-  const storedDates = JSON.parse(
-    localStorage.getItem("qiqiSavedDates") || "[]"
-  );
+const saveButton =
+  document.getElementById("saveButton");
 
-  if (Array.isArray(storedDates)) {
-    savedDates = storedDates;
+const monthTitle =
+  document.getElementById("monthTitle");
+
+const calendarDays =
+  document.getElementById("calendarDays");
+
+const prevMonthButton =
+  document.getElementById("prevMonth");
+
+const nextMonthButton =
+  document.getElementById("nextMonth");
+
+const recordList =
+  document.getElementById("recordList");
+
+const recordCount =
+  document.getElementById("recordCount");
+
+const modalOverlay =
+  document.getElementById("modalOverlay");
+
+const closeModalButton =
+  document.getElementById("closeModal");
+
+const cancelSaveButton =
+  document.getElementById("cancelSave");
+
+const saveForm =
+  document.getElementById("saveForm");
+
+const saveAmountInput =
+  document.getElementById("saveAmount");
+
+const saveDateInput =
+  document.getElementById("saveDate");
+
+const saveNoteInput =
+  document.getElementById("saveNote");
+
+const formError =
+  document.getElementById("formError");
+
+// 安全读取本地保存的数据
+function readJSON(key, fallback) {
+  try {
+    const value = JSON.parse(
+      localStorage.getItem(key)
+    );
+
+    return value ?? fallback;
+  } catch {
+    return fallback;
   }
-} catch {
-  savedDates = [];
 }
 
-// 获取网页上的元素
-const amountText = document.getElementById("amount");
-const progressBar = document.getElementById("progressBar");
-const saveButton = document.getElementById("saveButton");
-
-const monthTitle = document.getElementById("monthTitle");
-const calendarDays = document.getElementById("calendarDays");
-const prevMonthButton = document.getElementById("prevMonth");
-const nextMonthButton = document.getElementById("nextMonth");
-
-// 把日期转换成 2026-08-01 这种格式
+// 把日期变成 2026-08-01
 function getDateKey(date) {
   const year = date.getFullYear();
 
@@ -52,82 +85,196 @@ function getDateKey(date) {
 
 // 格式化金额
 function formatMoney(value) {
-  return value.toLocaleString("zh-CN", {
-    maximumFractionDigits: 2
-  });
+  return Number(value).toLocaleString(
+    "zh-CN",
+    {
+      maximumFractionDigits: 2
+    }
+  );
 }
 
-// 更新存钱金额与进度条
+// 格式化记录日期
+function formatRecordDate(dateString) {
+  const parts = dateString.split("-");
+
+  if (parts.length !== 3) {
+    return dateString;
+  }
+
+  return (
+    `${parts[0]}年` +
+    `${Number(parts[1])}月` +
+    `${Number(parts[2])}日`
+  );
+}
+
+// 读取存钱记录
+let records = readJSON(
+  "qiqiSavingRecords",
+  []
+);
+
+if (!Array.isArray(records)) {
+  records = [];
+}
+
+// 把之前测试的 120 元自动变成一条旧记录
+if (records.length === 0) {
+  const oldTotal =
+    Number(
+      localStorage.getItem("qiqiSaved")
+    ) || 0;
+
+  const oldDates =
+    readJSON("qiqiSavedDates", []);
+
+  if (oldTotal > 0) {
+    const oldDate =
+      Array.isArray(oldDates) &&
+      oldDates.length > 0
+        ? oldDates[0]
+        : getDateKey(new Date());
+
+    records.push({
+      id: `old-${Date.now()}`,
+      amount: oldTotal,
+      date: oldDate,
+      note: "之前已存",
+      createdAt: Date.now()
+    });
+  }
+}
+
+// 计算总金额
+function getSavedTotal() {
+  return records.reduce(
+    (total, record) =>
+      total + Number(record.amount || 0),
+    0
+  );
+}
+
+// 获取所有存过钱的日期
+function getSavedDates() {
+  return [
+    ...new Set(
+      records
+        .map(record => record.date)
+        .filter(Boolean)
+    )
+  ];
+}
+
+// 把数据保存进手机浏览器
+function saveLocalData() {
+  const total = getSavedTotal();
+  const savedDates = getSavedDates();
+
+  localStorage.setItem(
+    "qiqiSavingRecords",
+    JSON.stringify(records)
+  );
+
+  // 同时保留旧数据格式
+  localStorage.setItem(
+    "qiqiSaved",
+    String(total)
+  );
+
+  localStorage.setItem(
+    "qiqiSavedDates",
+    JSON.stringify(savedDates)
+  );
+}
+
+// 更新金额和进度条
 function updateSavings() {
+  const total = getSavedTotal();
+
   const progress = Math.min(
-    (saved / goal) * 100,
+    (total / goal) * 100,
     100
   );
 
   amountText.textContent =
-    `已存：¥${formatMoney(saved)} / ` +
+    `已存：¥${formatMoney(total)} / ` +
     `¥${formatMoney(goal)}（${progress.toFixed(1)}%）`;
 
-  progressBar.style.width = `${progress}%`;
+  const visibleProgress =
+    total > 0
+      ? Math.max(progress, 1.2)
+      : 0;
+
+  progressBar.style.width =
+    `${visibleProgress}%`;
 }
 
-// 生成当前月份的日历
+// 生成日历
 function renderCalendar() {
-  const year = viewingDate.getFullYear();
-  const month = viewingDate.getMonth();
+  const year =
+    viewingDate.getFullYear();
+
+  const month =
+    viewingDate.getMonth();
 
   monthTitle.textContent =
     `${year}年${month + 1}月`;
 
   calendarDays.innerHTML = "";
 
-  // 到了 2026 年 8 月以后，不允许再往前翻
-  const isFirstMonth =
-    year === firstMonth.getFullYear() &&
-    month === firstMonth.getMonth();
+  const firstDay =
+    new Date(
+      year,
+      month,
+      1
+    ).getDay();
 
-  prevMonthButton.disabled = isFirstMonth;
-  prevMonthButton.style.opacity =
-    isFirstMonth ? "0.25" : "1";
+  // 星期一放第一列
+  const emptyCount =
+    (firstDay + 6) % 7;
 
-  // 获取这个月第一天是星期几
-  const firstDay = new Date(
-    year,
-    month,
-    1
-  ).getDay();
+  const totalDays =
+    new Date(
+      year,
+      month + 1,
+      0
+    ).getDate();
 
-  // 日历以星期一作为第一列
-  const emptyCount = (firstDay + 6) % 7;
-
-  // 获取这个月一共有多少天
-  const totalDays = new Date(
-    year,
-    month + 1,
-    0
-  ).getDate();
-
-  // 添加月初的空白格
-  for (let i = 0; i < emptyCount; i++) {
+  for (
+    let i = 0;
+    i < emptyCount;
+    i++
+  ) {
     const emptyDay =
       document.createElement("div");
 
     emptyDay.className = "empty-day";
 
-    calendarDays.appendChild(emptyDay);
+    calendarDays.appendChild(
+      emptyDay
+    );
   }
 
-  const todayKey = getDateKey(new Date());
+  const todayKey =
+    getDateKey(new Date());
 
-  // 添加这个月的每一天
-  for (let day = 1; day <= totalDays; day++) {
-    const date = new Date(
-      year,
-      month,
-      day
-    );
+  const savedDateSet =
+    new Set(getSavedDates());
 
-    const dateKey = getDateKey(date);
+  for (
+    let day = 1;
+    day <= totalDays;
+    day++
+  ) {
+    const date =
+      new Date(
+        year,
+        month,
+        day
+      );
+
+    const dateKey =
+      getDateKey(date);
 
     const dayElement =
       document.createElement("div");
@@ -135,78 +282,260 @@ function renderCalendar() {
     dayElement.className = "day";
     dayElement.textContent = day;
 
-    // 今天显示粉紫色圆圈
     if (dateKey === todayKey) {
-      dayElement.classList.add("today");
+      dayElement.classList.add(
+        "today"
+      );
     }
 
-    // 存过钱的日期显示爱心
-    if (savedDates.includes(dateKey)) {
-      dayElement.classList.add("saved");
+    if (
+      savedDateSet.has(dateKey)
+    ) {
+      dayElement.classList.add(
+        "saved"
+      );
     }
 
-    calendarDays.appendChild(dayElement);
+    calendarDays.appendChild(
+      dayElement
+    );
   }
 }
 
-// 点击“今天存钱”
-saveButton.addEventListener(
-  "click",
-  function () {
-    const input = prompt(
-      "七七今天存了多少钱？"
+// 生成最近记录
+function renderRecords() {
+  recordList.innerHTML = "";
+
+  recordCount.textContent =
+    `${records.length} 笔`;
+
+  if (records.length === 0) {
+    const empty =
+      document.createElement("p");
+
+    empty.className =
+      "empty-records";
+
+    empty.textContent =
+      "还没有存钱记录，第一笔正等着七七呢 ✨";
+
+    recordList.appendChild(empty);
+
+    return;
+  }
+
+  const sortedRecords =
+    [...records].sort(
+      (a, b) => {
+        const dateCompare =
+          String(b.date).localeCompare(
+            String(a.date)
+          );
+
+        if (dateCompare !== 0) {
+          return dateCompare;
+        }
+
+        return (
+          Number(b.createdAt || 0) -
+          Number(a.createdAt || 0)
+        );
+      }
     );
 
-    // 点取消时什么也不做
-    if (input === null) {
-      return;
+  sortedRecords
+    .slice(0, 8)
+    .forEach(record => {
+      const item =
+        document.createElement("article");
+
+      item.className = "record-item";
+
+      const info =
+        document.createElement("div");
+
+      info.className = "record-info";
+
+      const date =
+        document.createElement("span");
+
+      date.className = "record-date";
+
+      date.textContent =
+        formatRecordDate(record.date);
+
+      const note =
+        document.createElement("span");
+
+      note.className = "record-note";
+
+      note.textContent =
+        record.note || "存入小金库";
+
+      const money =
+        document.createElement("strong");
+
+      money.className = "record-amount";
+
+      money.textContent =
+        `+¥${formatMoney(record.amount)}`;
+
+      info.appendChild(date);
+      info.appendChild(note);
+
+      item.appendChild(info);
+      item.appendChild(money);
+
+      recordList.appendChild(item);
+    });
+}
+
+// 更新整个页面
+function updatePage() {
+  updateSavings();
+  renderCalendar();
+  renderRecords();
+}
+
+// 打开弹窗
+function openModal() {
+  saveAmountInput.value = "";
+  saveNoteInput.value = "";
+  saveDateInput.value =
+    getDateKey(new Date());
+
+  formError.textContent = "";
+
+  modalOverlay.hidden = false;
+
+  document.body.classList.add(
+    "modal-open"
+  );
+
+  requestAnimationFrame(() => {
+    modalOverlay.classList.add(
+      "show"
+    );
+  });
+}
+
+// 关闭弹窗
+function closeModal() {
+  modalOverlay.classList.remove(
+    "show"
+  );
+
+  document.body.classList.remove(
+    "modal-open"
+  );
+
+  setTimeout(() => {
+    modalOverlay.hidden = true;
+  }, 200);
+}
+
+// 点击记一笔存钱
+saveButton.addEventListener(
+  "click",
+  openModal
+);
+
+closeModalButton.addEventListener(
+  "click",
+  closeModal
+);
+
+cancelSaveButton.addEventListener(
+  "click",
+  closeModal
+);
+
+// 点击弹窗外面关闭
+modalOverlay.addEventListener(
+  "click",
+  function (event) {
+    if (
+      event.target === modalOverlay
+    ) {
+      closeModal();
     }
+  }
+);
 
-    const amount = Number(input.trim());
+// 提交存钱记录
+saveForm.addEventListener(
+  "submit",
+  function (event) {
+    event.preventDefault();
 
-    // 阻止错误金额
+    formError.textContent = "";
+
+    const cleanedAmount =
+      saveAmountInput.value
+        .replace(/,/g, "")
+        .trim();
+
+    const amount =
+      Number(cleanedAmount);
+
+    const date =
+      saveDateInput.value;
+
+    const note =
+      saveNoteInput.value.trim();
+
     if (
       !Number.isFinite(amount) ||
       amount <= 0
     ) {
-      alert("请输入一个大于 0 的数字～");
+      formError.textContent =
+        "请输入一个大于 0 的金额～";
+
       return;
     }
 
-    // 增加总金额
-    saved += amount;
+    if (!date) {
+      formError.textContent =
+        "请选择存钱日期～";
 
-    // 记录今天的日期
-    const todayKey = getDateKey(new Date());
-
-    if (!savedDates.includes(todayKey)) {
-      savedDates.push(todayKey);
+      return;
     }
 
-    // 保存到手机浏览器
-    localStorage.setItem(
-      "qiqiSaved",
-      String(saved)
-    );
+    records.push({
+      id:
+        `${Date.now()}-` +
+        `${Math.random()
+          .toString(16)
+          .slice(2)}`,
 
-    localStorage.setItem(
-      "qiqiSavedDates",
-      JSON.stringify(savedDates)
-    );
+      amount,
+      date,
+      note,
+      createdAt: Date.now()
+    });
 
-    updateSavings();
-    renderCalendar();
+    saveLocalData();
+
+    // 保存后自动跳到这笔记录所在月份
+    const selectedDate =
+      new Date(`${date}T00:00:00`);
+
+    viewingDate =
+      new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        1
+      );
+
+    updatePage();
+    closeModal();
   }
 );
 
-// 上一个月
+// 上个月
 prevMonthButton.addEventListener(
   "click",
   function () {
-    if (prevMonthButton.disabled) {
-      return;
-    }
-
     viewingDate.setMonth(
       viewingDate.getMonth() - 1
     );
@@ -215,7 +544,7 @@ prevMonthButton.addEventListener(
   }
 );
 
-// 下一个月
+// 下个月
 nextMonthButton.addEventListener(
   "click",
   function () {
@@ -227,6 +556,19 @@ nextMonthButton.addEventListener(
   }
 );
 
-// 第一次打开网页时运行
-updateSavings();
-renderCalendar();
+// 按键盘 Esc 关闭弹窗
+document.addEventListener(
+  "keydown",
+  function (event) {
+    if (
+      event.key === "Escape" &&
+      !modalOverlay.hidden
+    ) {
+      closeModal();
+    }
+  }
+);
+
+// 第一次打开页面
+saveLocalData();
+updatePage();
